@@ -138,7 +138,11 @@ When a workflow run associated to a pull request is completed, a report is gener
 
 === Cancel duplicate workflow runs
 
-When multiple workflow runs are targeting the same branch, older workflow runs are cancelled to preserve CI resources.
+When multiple workflow runs are targeting the same branch, some workflow runs are cancelled to preserve CI resources:
+
+* For pull requests, all but the latest run are cancelled.
+* For pushes to branches, all but the oldest run are cancelled.
+  When the oldest run finishes, the lasted cancelled run is restarted.
 
 This is especially useful when someone pushes new commits to a pull request while workflow runs are still running to validate the previous commits.
 
