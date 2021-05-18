@@ -71,6 +71,8 @@ public class CancelDuplicateWorkflowRuns {
         for (GHWorkflowRun workflowRunToCancel : workflowRunsToCancel) {
             try {
                 if (!quarkusBotConfig.isDryRun()) {
+                    LOG.tracef("Workflow run #%d - Cancelling workflow run #%d for branch %s",
+                            workflowRun.getId(), workflowRunToCancel.getId(), workflowRun.getHeadBranch());
                     workflowRunToCancel.cancel();
                 } else {
                     LOG.infof("Workflow run #%d - Cancelling workflow run #%d for branch '%s'",
@@ -94,6 +96,9 @@ public class CancelDuplicateWorkflowRuns {
         Optional<GHWorkflowRun> lastFollowingCancelledRun = getFollowingCancelledRuns(workflowRun)
                 .reduce((first, second) -> second);
         if (lastFollowingCancelledRun.isEmpty()) {
+            LOG.tracef(
+                    "Workflow run #%d - No following workflow run to rerun on branch '%s'",
+                    (Object) workflowRun.getId(), workflowRun.getHeadBranch());
             return;
         }
 
